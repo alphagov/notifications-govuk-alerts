@@ -1,0 +1,24 @@
+---
+applications:
+  - name: {{ cf_app_name }}
+    buildpack: python_buildpack
+
+    memory: 1G
+
+    routes:
+      - route: {{ cf_app_name }}-{{ environment }}.cloudapps.digital
+
+    health-check-type: port
+    health-check-invocation-timeout: 10
+
+    services:
+      - logit-ssl-syslog-drain
+      - notify-splunk
+
+    env:
+      NOTIFY_API_HOST: '{{ API_HOST_NAME }}'
+      NOTIFY_API_SHARED_KEY: '{{ DYNAMIC_ALERTS_NOTIFY_API_SHARED_KEY }}'
+      AWS_ACCESS_KEY_ID: '{{ DYNAMIC_ALERTS_AWS_ACCESS_KEY_ID }}'
+      AWS_SECRET_ACCESS_KEY: '{{ DYNAMIC_ALERTS_AWS_SECRET_ACCESS_KEY }}'
+      FASTLY_SERVICE_ID: '{{ DYNAMIC_ALERTS_FASTLY_SERVICE_ID }}'
+      FASTLY_API_KEY: '{{ DYNAMIC_ALERTS_FASTLY_API_KEY }}'
